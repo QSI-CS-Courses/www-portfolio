@@ -1,0 +1,2932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WWW Bootcamp - Web Development</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --secondary: #072943;
+            --accent: #f59e0b;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --text: #334155;
+            --code-bg: #1e293b;
+            --terminal: #0d1117;
+            --sidebar-width: 300px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--text);
+            overflow: hidden;
+            position: relative;
+            height: 100vh;
+        }
+
+        .presentation-container {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .slide {
+            width: 90%;
+            max-width: 1200px;
+            height: 80vh;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            padding: 3rem;
+            position: absolute;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            overflow-y: auto;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+            z-index: 10;
+        }
+
+        .slide.prev {
+            transform: translateX(-100px);
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--accent);
+            border-radius: 2px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+            margin: 1.5rem 0 1rem;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin: 1.2rem 0 0.8rem;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+            color: var(--primary-dark);
+            margin: 1rem 0 0.5rem;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 1rem 0;
+        }
+
+        li {
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            position: relative;
+            padding-left: 2rem;
+        }
+
+        li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, rgba(79, 70, 229, 0.2) 0%, rgba(79, 70, 229, 0.2) 100%);
+            background-repeat: no-repeat;
+            background-size: 0% 100%;
+            animation: highlight 1s ease forwards;
+            padding: 0 4px;
+            border-radius: 3px;
+        }
+
+        @keyframes highlight {
+            to {
+                background-size: 100% 100%;
+            }
+        }
+
+        .terminal {
+            background: var(--terminal);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #e6edf3;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .terminal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: #161b22;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-content {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        .command {
+            color: #79c0ff;
+        }
+
+        .command-output {
+            color: #c9d1d9;
+            margin-left: 1rem;
+        }
+
+        .command-prompt {
+            color: #8b949e;
+        }
+
+        .navigation {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 1rem;
+            z-index: 100;
+        }
+
+        .nav-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-btn:active {
+            transform: translateY(0);
+        }
+
+        .slide-indicator {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            color: var(--primary);
+            z-index: 100;
+        }
+
+        .keyboard-hint {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: var(--text);
+            z-index: 100;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .card {
+            background: rgba(79, 70, 229, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1.5rem 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        th, td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: rgba(79, 70, 229, 0.05);
+        }
+
+        .code-inline {
+            background: var(--code-bg);
+            color: #e6edf3;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+        }
+
+        .tip-box {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.05) 100%);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip-box h3 {
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .practice-steps {
+            counter-reset: step;
+            list-style-type: none;
+            margin: 1.5rem 0;
+        }
+
+        .practice-steps li {
+            counter-increment: step;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .practice-steps li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .practice-steps li::after {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+            display: none;
+        }
+
+        /* Table of Contents Styles */
+        .toc-btn {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--primary);
+            transition: all 0.3s ease;
+            z-index: 101;
+        }
+
+        .toc-btn:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+        }
+
+        .toc-panel {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: var(--sidebar-width);
+            height: 100%;
+            background: white;
+            box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            transition: right 0.3s ease;
+            z-index: 102;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .toc-panel.active {
+            right: 0;
+        }
+
+        .toc-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text);
+            cursor: pointer;
+        }
+
+        .toc-title {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .toc-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .toc-section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toc-section-title i {
+            transition: transform 0.3s ease;
+        }
+
+        .toc-section-title.active i {
+            transform: rotate(90deg);
+        }
+
+        .toc-section-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .toc-section-content.active {
+            max-height: 500px;
+        }
+
+        .toc-item {
+            padding: 0.5rem 1rem;
+            margin: 0.2rem 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1rem;
+        }
+
+        .toc-item:hover {
+            background: rgba(79, 70, 229, 0.1);
+            padding-left: 1.2rem;
+        }
+
+        .toc-item.active {
+            background: rgba(79, 70, 229, 0.2);
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        /* Topic Card Styles */
+        .topic-card {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .topic-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--primary);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .topic-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .topic-card p {
+            font-size: 1rem;
+            color: var(--text);
+        }
+
+        .topic-card i {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .welcome-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+        }
+
+        .welcome-title {
+            font-size: 3.5rem;
+            background: linear-gradient(120deg, var(--primary) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.5rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+        }
+
+        .welcome-icon {
+            font-size: 5rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .setup-steps {
+            counter-reset: setup-step;
+            list-style-type: none;
+            margin: 1.5rem 0;
+        }
+
+        .setup-steps li {
+            counter-increment: setup-step;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .setup-steps li::before {
+            content: counter(setup-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2rem;
+            height: 2rem;
+            background: var(--secondary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .project-structure {
+            background: rgba(79, 70, 229, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        .file-item {
+            margin: 0.5rem 0;
+            padding-left: 1rem;
+        }
+
+        .folder {
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        .file {
+            color: var(--text);
+        }
+
+        .warning-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+            border-left: 4px solid #ef4444;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .warning-box h3 {
+            color: #ef4444;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .vscode-steps {
+            background: rgba(6, 182, 212, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .vscode-steps h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .vscode-steps ol {
+            margin-left: 1rem;
+        }
+
+        .vscode-steps li {
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .vscode-steps li::before {
+            content: counter(list-item);
+            position: absolute;
+            left: 0;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* HTML Specific Styles */
+        .html-tag {
+            display: inline-block;
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-dark);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 0.9rem;
+            margin: 0.2rem;
+        }
+
+        .html-tag::before,
+        .html-tag::after {
+            content: '<';
+        }
+
+        .html-tag::after {
+            content: '>';
+        }
+
+        .html-tag.self-closing::after {
+            content: '/>';
+        }
+
+        .element-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .element-card h4 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .element-card h4 .html-tag {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--secondary);
+        }
+
+        .dev-tools-steps {
+            background: rgba(245, 158, 11, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .dev-tools-steps h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .best-practices {
+            background: rgba(16, 185, 129, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid #10b981;
+        }
+
+        .best-practices h4 {
+            color: #10b981;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .exercise-container {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.05) 0%, rgba(79, 70, 229, 0.02) 100%);
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+            border: 2px solid var(--primary);
+        }
+
+        .exercise-steps {
+            counter-reset: exercise-step;
+            list-style-type: none;
+            margin: 1.5rem 0;
+        }
+
+        .exercise-steps li {
+            counter-increment: exercise-step;
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-left: 3rem;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+            padding: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .exercise-steps li:hover {
+            background: rgba(255, 255, 255, 0.9);
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .exercise-steps li::before {
+            content: counter(exercise-step);
+            position: absolute;
+            left: 0.5rem;
+            top: 1rem;
+            width: 2rem;
+            height: 2rem;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .experiment-box {
+            background: rgba(6, 182, 212, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--secondary);
+        }
+
+        .experiment-box h4 {
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .remember-box {
+            background: rgba(245, 158, 11, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-left: 4px solid var(--accent);
+        }
+
+        .remember-box h4 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* CSS Specific Styles */
+        .no-bullet {
+        list-style-type: none;
+        }
+        .no-bullet::before {
+            content: none;
+        }
+
+        .css-example {
+            background: rgba(6, 182, 212, 0.05);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .css-example::before {
+            content: 'CSS';
+            position: absolute;
+            top: 0;
+            left: 0;
+            color: rgba(6, 182, 212, 0.2);
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .css-code {
+            background: #0d1117;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            color: #e6edf3;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            overflow-x: auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .selector {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+
+        .property {
+            color: #50fa7b;
+        }
+
+        .value {
+            color: #a5d6ff;
+        }
+
+        .value2 {
+            color: #080650;
+        }
+
+        .css-comment {
+            color: #6272a4;
+            font-style: italic;
+        }
+
+        .css-highlight {
+            background: rgba(255, 217, 102, 0.2);
+            padding: 0 2px;
+            border-radius: 2px;
+        }
+
+        .css-property-card {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border-left: 4px solid var(--secondary);
+        }
+
+        .css-property-card h4 {
+            margin-top: 0;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .css-selector {
+            background: rgba(183, 195, 197, 0.219);
+            color: #02333b;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            font-size: 1.2rem;
+            margin: 0.2rem;
+        }
+
+        .media-query-breakpoint {
+            color: #ff79c6;
+            font-weight: bold;
+        }
+
+        .keyframe {
+            color: #ffb86c;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .slide {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toc-panel {
+                width: 80%;
+            }
+
+            .welcome-title {
+                font-size: 2.5rem;
+            }
+
+            /*JS Specific Styles */
+            .keyword {
+                color: #ff79c6;
+                font-weight: bold;
+            }
+
+            .variable {
+                color: #f8f8f2;
+            }
+
+            .method {
+                color: #50fa7b;
+            }
+
+            .string {
+                color: #f1fa8c;
+            }
+
+            .number {
+                color: #bd93f9;
+            }
+
+            .comment {
+                color: #6272a4;
+                font-style: italic;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation-container">
+        <!-- Slide 1: Welcome -->
+        <div class="slide active">
+            <div class="welcome-container">
+                <div class="welcome-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <h1 class="welcome-title">Welcome to WWW Bootcamp</h1>
+                <p class="welcome-subtitle">Your journey to becoming a web developer starts here</p>
+                <div class="terminal" style="max-width: 600px;">
+                    <div class="terminal-header">
+                        <div class="terminal-dot dot-red"></div>
+                        <div class="terminal-dot dot-yellow"></div>
+                        <div class="terminal-dot dot-green"></div>
+                    </div>
+                    <div class="terminal-content">
+                        <div><span class="command-prompt">$</span> <span class="command">echo "Hello, World!"</span></div>
+                        <div class="command-output">Hello, World!</div>
+                        <div><span class="command-prompt">$</span> <span class="command">console.log("Welcome to Web Development")</span></div>
+                        <div class="command-output">Welcome to Web Development</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Topics Overview -->
+        <div class="slide">
+            <h1>Course Topics</h1>
+            <p>Click on any topic to jump directly to that section:</p>
+            
+            <div class="grid">
+                <div class="topic-card" data-topic="cli">
+                    <i class="fas fa-terminal"></i>
+                    <h3>Command Line Interface</h3>
+                    <p>Master terminal and essential developer commands</p>
+                </div>
+                <div class="topic-card" data-topic="portfolio">
+                    <i class="fas fa-briefcase"></i>
+                    <h3>Portfolio Project</h3>
+                    <p>Set up your Saitama portfolio project</p>
+                </div>
+                <div class="topic-card" data-topic="html">
+                    <i class="fas fa-code"></i>
+                    <h3>HTML</h3>
+                    <p>Structure your web content with semantic markup</p>
+                </div>
+                <div class="topic-card" data-topic="css">
+                    <i class="fas fa-palette"></i>
+                    <h3>CSS</h3>
+                    <p>Style and layout your web pages with modern CSS</p>
+                </div>
+                <div class="topic-card" data-topic="js">
+                    <i class="fas fa-laptop-code"></i>
+                    <h3>JavaScript</h3>
+                    <p>Add interactivity and dynamic behavior to your websites</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: CLI Introduction -->
+        <div class="slide">
+            <h1>Command Line Interface</h1>
+            <h2>Master the Terminal</h2>
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">echo "Welcome to the CLI Bootcamp"</span></div>
+                    <div class="command-output">Welcome to the CLI Bootcamp</div>
+                </div>
+            </div>
+            <p style="font-size: 1.3rem; text-align: center; margin-top: 2rem;">
+                <span class="highlight">Navigate</span> • <span class="highlight">Create</span> • <span class="highlight">Automate</span> • <span class="highlight">Control</span>
+            </p>
+        </div>
+
+        <!-- Slide 4: What is CLI -->
+        <div class="slide">
+            <h1>What is Command Line Interface (CLI)?</h1>
+            <p>The Command Line Interface (CLI) is a text-based interface for interacting with your computer's operating system. Instead of clicking icons and using a graphical interface, you type commands to perform tasks.</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-keyboard"></i> Text-Based</h3>
+                    <p>Interact with your computer through typed commands rather than graphical elements.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-terminal"></i> Direct Control</h3>
+                    <p>Execute commands directly on the operating system without intermediate layers.</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-code"></i> Developer Essential</h3>
+                    <p>A fundamental tool that every developer needs in their toolkit.</p>
+                </div>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">ls -la</span></div>
+                    <div class="command-output">drwxr-xr-x  5 user  staff   160 Jun 15 10:30 .</div>
+                    <div class="command-output">drwxr-xr-x  3 user  staff    96 Jun 15 10:25 ..</div>
+                    <div class="command-output">-rw-r--r--  1 user  staff  1024 Jun 15 10:30 README.md</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5: Why Use Command Line -->
+        <div class="slide">
+            <h1>Why Use the Command Line?</h1>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-tachometer-alt"></i> Efficiency</h3>
+                    <p>Perform tasks faster than with a GUI</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-crosshairs"></i> Precision</h3>
+                    <p>Exact control over commands and parameters</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-robot"></i> Automation</h3>
+                    <p>Write scripts to automate repetitive tasks</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-server"></i> Remote Access</h3>
+                    <p>Work on remote servers where no GUI is available</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-users"></i> Developer Standard</h3>
+                    <p>Essential tool for all software developers</p>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Pro Tip</h3>
+                <p>Mastering the CLI will significantly boost your productivity as a developer. Many professional development workflows are built around command-line tools.</p>
+            </div>
+        </div>
+
+        <!-- Slide 6: Modern Terminals -->
+        <div class="slide">
+            <h1>Modern Terminals</h1>
+            
+            <h2>Windows</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Command Prompt (cmd)</h3>
+                    <p>Traditional Windows command line</p>
+                </div>
+                <div class="card">
+                    <h3>PowerShell</h3>
+                    <p>More advanced command line with scripting capabilities</p>
+                </div>
+                <div class="card">
+                    <h3>Windows Terminal <span style="color: var(--accent);">(recommended)</span></h3>
+                    <p>Modern terminal application with tabs, themes, and more</p>
+                </div>
+            </div>
+
+            <h2>Mac/Linux</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Terminal</h3>
+                    <p>Built-in command line application</p>
+                </div>
+                <div class="card">
+                    <h3>iTerm2 (Mac only)</h3>
+                    <p>Enhanced terminal with additional features</p>
+                </div>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">echo "Choose the terminal that works best for you!"</span></div>
+                    <div class="command-output">Choose the terminal that works best for you!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7: Basic Commands - Navigation -->
+        <div class="slide">
+            <h1>Basic Commands - Navigation and File Management</h1>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="code-inline">pwd</span></td>
+                            <td>Print working directory</td>
+                            <td><span class="code-inline">pwd</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">ls</span> (Mac/Linux) or <span class="code-inline">dir</span> (Windows)</td>
+                            <td>List directory contents</td>
+                            <td><span class="code-inline">ls</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">cd</span></td>
+                            <td>Change directory</td>
+                            <td><span class="code-inline">cd Documents</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">cd ..</span></td>
+                            <td>Go to parent directory</td>
+                            <td><span class="code-inline">cd ..</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">mkdir</span></td>
+                            <td>Create new directory</td>
+                            <td><span class="code-inline">mkdir project</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">rmdir</span></td>
+                            <td>Remove empty directory</td>
+                            <td><span class="code-inline">rmdir project</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">rm</span> (Mac/Linux) or <span class="code-inline">del</span> (Windows)</td>
+                            <td>Remove file</td>
+                            <td><span class="code-inline">rm file.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">cp</span> (Mac/Linux) or <span class="code-inline">copy</span> (Windows)</td>
+                            <td>Copy file</td>
+                            <td><span class="code-inline">cp file1.txt file2.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">mv</span> (Mac/Linux) or <span class="code-inline">move</span> (Windows)</td>
+                            <td>Move/rename file</td>
+                            <td><span class="code-inline">mv old.txt new.txt</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 8: File Content Commands -->
+        <div class="slide">
+            <h1>File Content Commands</h1>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="code-inline">cat</span> (Mac/Linux) or <span class="code-inline">type</span> (Windows)</td>
+                            <td>Display file content</td>
+                            <td><span class="code-inline">cat file.txt</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">nano</span> or <span class="code-inline">vim</span></td>
+                            <td>Text editors in terminal</td>
+                            <td><span class="code-inline">nano file.txt</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>System Information</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="code-inline">whoami</span></td>
+                            <td>Show current user</td>
+                            <td><span class="code-inline">whoami</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">date</span></td>
+                            <td>Show current date/time</td>
+                            <td><span class="code-inline">date</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">clear</span> (Mac/Linux) or <span class="code-inline">cls</span> (Windows)</td>
+                            <td>Clear screen</td>
+                            <td><span class="code-inline">clear</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">cat hello.txt</span></div>
+                    <div class="command-output">Hello, World!</div>
+                    <div><span class="command-prompt">$</span> <span class="command">whoami</span></div>
+                    <div class="command-output">developer</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9: Git Commands -->
+        <div class="slide">
+            <h1>Git Commands (Version Control)</h1>
+            <p>Git is a version control system that tracks changes in your files.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="code-inline">git init</span></td>
+                            <td>Initialize a new Git repository</td>
+                            <td><span class="code-inline">git init</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">git clone</span></td>
+                            <td>Copy an existing repository</td>
+                            <td><span class="code-inline">git clone https://github.com/user/repo.git</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">git status</span></td>
+                            <td>Show repository status</td>
+                            <td><span class="code-inline">git status</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">git add</span></td>
+                            <td>Add files to staging area</td>
+                            <td><span class="code-inline">git add file.txt</span> or <span class="code-inline">git add .</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">git commit</span></td>
+                            <td>Save changes with a message</td>
+                            <td><span class="code-inline">git commit -m "Add feature"</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">git push</span></td>
+                            <td>Upload changes to remote repository</td>
+                            <td><span class="code-inline">git push</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">git pull</span></td>
+                            <td>Download changes from remote repository</td>
+                            <td><span class="code-inline">git pull</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">git log</span></td>
+                            <td>View commit history</td>
+                            <td><span class="code-inline">git log</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Git Workflow</h3>
+                <p>The typical Git workflow: <span class="code-inline">git add</span> → <span class="code-inline">git commit</span> → <span class="code-inline">git push</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 10: GitHub CLI Commands -->
+        <div class="slide">
+            <h1>GitHub CLI Commands (gh)</h1>
+            <p>GitHub CLI allows you to work with GitHub from the terminal.</p>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Command</th>
+                            <th>Description</th>
+                            <th>Example</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="code-inline">gh auth login</span></td>
+                            <td>Authenticate with GitHub</td>
+                            <td><span class="code-inline">gh auth login</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">gh repo create</span></td>
+                            <td>Create new repository</td>
+                            <td><span class="code-inline">gh repo create my-project</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">gh repo clone</span></td>
+                            <td>Clone repository</td>
+                            <td><span class="code-inline">gh repo clone user/repo</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">gh pr create</span></td>
+                            <td>Create pull request</td>
+                            <td><span class="code-inline">gh pr create</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">gh issue create</span></td>
+                            <td>Create new issue</td>
+                            <td><span class="code-inline">gh issue create</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">gh repo create my-awesome-project --public</span></div>
+                    <div class="command-output">✓ Created repository user/my-awesome-project on GitHub</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Useful Tips -->
+        <div class="slide">
+            <h1>Useful Tips</h1>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-keyboard"></i> Tab Completion</h3>
+                    <p>Press Tab to auto-complete file/folder names</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-history"></i> Command History</h3>
+                    <p>Use ↑/↓ arrows to navigate through previous commands</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-ban"></i> Ctrl+C</h3>
+                    <p>Cancel current command</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-sign-out-alt"></i> Exit Terminal</h3>
+                    <p>Ctrl+Z (Windows) or Ctrl+D (Mac/Linux) to exit terminal</p>
+                </div>
+            </div>
+
+            <h2>Path Shortcuts</h2>
+            <ul>
+                <li><span class="code-inline">.</span> - Current directory</li>
+                <li><span class="code-inline">..</span> - Parent directory</li>
+                <li><span class="code-inline">~</span> - Home directory (Mac/Linux)</li>
+            </ul>
+
+            <h2>Common Paths</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Path</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="code-inline">.</span></td>
+                            <td>Current directory</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">..</span></td>
+                            <td>Parent directory</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">~</span> or <span class="code-inline">%USERPROFILE%</span></td>
+                            <td>Home directory</td>
+                        </tr>
+                        <tr>
+                            <td><span class="code-inline">/</span> (Mac/Linux) or <span class="code-inline">C:\</span> (Windows)</td>
+                            <td>Root directory</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Slide 12: Practice Exercise -->
+        <div class="slide">
+            <h1>Practice Exercise</h1>
+            <p>Try these commands in your terminal:</p>
+            
+            <ol class="practice-steps">
+                <li>Navigate to your Documents folder</li>
+                <li>Create a new folder called "test-project"</li>
+                <li>Navigate into that folder</li>
+                <li>Create a new file called "hello.txt"</li>
+                <li>List the contents of the directory</li>
+                <li>Navigate back to the parent directory</li>
+                <li>Remove the "test-project" folder</li>
+            </ol>
+
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">cd Documents</span></div>
+                    <div><span class="command-prompt">$</span> <span class="command">mkdir test-project</span></div>
+                    <div><span class="command-prompt">$</span> <span class="command">cd test-project</span></div>
+                    <div><span class="command-prompt">$</span> <span class="command">touch hello.txt</span></div>
+                    <div><span class="command-prompt">$</span> <span class="command">ls</span></div>
+                    <div class="command-output">hello.txt</div>
+                    <div><span class="command-prompt">$</span> <span class="command">cd ..</span></div>
+                    <div><span class="command-prompt">$</span> <span class="command">rm -rf test-project</span></div>
+                </div>
+            </div>
+
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Remember</h3>
+                <p>The command line is a powerful tool that takes practice to master. Don't worry if it feels unfamiliar at first - you'll get comfortable with it over time!</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Saitama Portfolio Project -->
+        <div class="slide">
+            <h1>Saitama Portfolio - Student Handout</h1>
+            
+            <h2>Project Overview</h2>
+            <p>This is a web portfolio project featuring Saitama from "One Punch Man". You'll learn HTML, CSS, and JavaScript by building and exploring this interactive portfolio.</p>
+            
+            <h2>Prerequisites</h2>
+            <p>Before starting, make sure you have these tools installed:</p>
+            <ol>
+                <li>Git - Version control system</li>
+                <li>Node.js - JavaScript runtime environment</li>
+                <li>Visual Studio Code (VS Code) - Code editor</li>
+            </ol>
+            
+            <h2>Setup Instructions</h2>
+            <p>Follow these steps to get the project running on your computer:</p>
+            
+            <ol class="setup-steps">
+                <li>
+                    <strong>Open Terminal (Command Prompt)</strong>
+                    <ul>
+                        <li>On Windows: Press <span class="code-inline">Windows + R</span>, type <span class="code-inline">cmd</span>, and press Enter</li>
+                        <li>On Mac: Open Terminal from Applications > Utilities</li>
+                    </ul>
+                </li>
+                <li>
+                    <strong>Navigate to Documents folder</strong>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-content">
+                            <div><span class="command-prompt">$</span> <span class="command">cd Documents</span></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <strong>Create a folder for web development projects</strong>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-content">
+                            <div><span class="command-prompt">$</span> <span class="command">mkdir www</span></div>
+                            <div><span class="command-prompt">$</span> <span class="command">cd www</span></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <strong>Clone the project repository</strong>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-content">
+                            <div><span class="command-prompt">$</span> <span class="command">git clone https://github.com/QSI-CS-Courses/saitama</span></div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <strong>Open the project in VS Code</strong>
+                    <div class="vscode-steps">
+                        <h4><i class="fas fa-code"></i> How to open in VS Code:</h4>
+                        <ol>
+                            <li>Open VS Code</li>
+                            <li>Go to File > Open Folder</li>
+                            <li>Navigate to <span class="code-inline">Documents/www/saitama</span></li>
+                            <li>Select the <span class="code-inline">saitama</span> folder and click "Open"</li>
+                        </ol>
+                    </div>
+                </li>
+                <li>
+                    <strong>Open the integrated terminal in VS Code</strong>
+                    <p>In VS Code, press <span class="code-inline">Ctrl + `</span> (backtick) or go to Terminal > New Terminal</p>
+                </li>
+                <li>
+                    <strong>Install project dependencies</strong>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-content">
+                            <div><span class="command-prompt">$</span> <span class="command">npm install</span></div>
+                        </div>
+                    </div>
+                    <p>This will download and install all required tools including webpack, babel, and other libraries.</p>
+                </li>
+                <li>
+                    <strong>Build the project</strong>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-content">
+                            <div><span class="command-prompt">$</span> <span class="command">npm run build</span></div>
+                        </div>
+                    </div>
+                    <p>This creates a production-ready version of your website in the <span class="code-inline">dist</span> folder.</p>
+                </li>
+                <li>
+                    <strong>Start the development server</strong>
+                    <div class="terminal">
+                        <div class="terminal-header">
+                            <div class="terminal-dot dot-red"></div>
+                            <div class="terminal-dot dot-yellow"></div>
+                            <div class="terminal-dot dot-green"></div>
+                        </div>
+                        <div class="terminal-content">
+                            <div><span class="command-prompt">$</span> <span class="command">npm run dev</span></div>
+                        </div>
+                    </div>
+                    <p>This will start a local web server and provide you with a localhost link (usually http://localhost:8080)</p>
+                </li>
+                <li>
+                    <strong>Open the website</strong>
+                    <ul>
+                        <li>Click on the localhost link provided in the terminal</li>
+                        <li>Or open your browser and navigate to the provided address</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <h2>Troubleshooting</h2>
+            <div class="warning-box">
+                <h3><i class="fas fa-exclamation-triangle"></i> If you encounter any errors:</h3>
+                <ol>
+                    <li>Make sure all prerequisites are installed correctly</li>
+                    <li>Check that you're in the correct directory (<span class="code-inline">Documents/www/saitama</span>)</li>
+                    <li>Make sure you ran <span class="code-inline">npm install</span> before <span class="code-inline">npm run build</span></li>
+                    <li>Call for assistance if problems persist</li>
+                </ol>
+            </div>
+
+            <h2>Project Structure</h2>
+            <p>After setup, you'll see these important files and folders:</p>
+            <div class="project-structure">
+                <div class="file-item folder">saitama/</div>
+                <div class="file-item file">├── index.html - The main HTML file (without script tags)</div>
+                <div class="file-item file">├── src/index.js - All JavaScript code for the portfolio</div>
+                <div class="file-item folder">├── public/ - Folder containing images</div>
+                <div class="file-item folder">├── dist/ - Generated production files (created after build)</div>
+                <div class="file-item file">└── package.json - Project configuration and dependencies</div>
+            </div>
+
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Modern Web Development</h3>
+                <p>This project demonstrates modern web development practices including module bundling with webpack, responsive design, and interactive JavaScript components.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: HTML Elements Exploration -->
+        <div class="slide">
+            <h1>HTML Elements Exploration</h1>
+            
+            <h2>Exploration Exercise</h2>
+            <p>Let's start by exploring the Saitama portfolio in your browser:</p>
+            
+            <ol class="practice-steps">
+                <li>Open your Saitama portfolio in the browser</li>
+                <li>Press F12 to open Developer Tools</li>
+                <li>Click the "Select Element" tool (usually looks like a cursor icon)</li>
+                <li>Click on different parts of the page to see their HTML structure</li>
+                <li>Try modifying text or styles in the Elements panel</li>
+                <li>Look for these elements as you explore:
+                    <ul>
+                        <li>Page header with title "Saitama"</li>
+                        <li>Main content area with image carousel</li>
+                        <li>Footer with copyright information</li>
+                        <li>The image of Saitama</li>
+                        <li>Headings like "About Me" and "My Powers"</li>
+                        <li>List of powers</li>
+                        <li>Contact button</li>
+                    </ul>
+                </li>
+            </ol>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Pro Tip</h3>
+                <p>Use the Developer Tools to inspect and understand how the page is structured. This hands-on exploration will help you grasp HTML concepts more effectively!</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: What is HTML? & Document Structure -->
+        <div class="slide">
+            <h1>What is HTML?</h1>
+            <p>HTML (HyperText Markup Language) is the standard markup language for creating web pages. It uses "tags" to structure content on the web.</p>
+            
+            <h2>Document Structure Tags</h2>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">html</span> The Root Element</h4>
+                <p>The root element of an HTML page. All other elements are contained within this tag.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">head</span> Document Metadata</h4>
+                <p>Contains meta information about the document. Not displayed on the page. Includes title, styles, scripts, and metadata.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">title</span> Page Title</h4>
+                <p>Sets the title of the webpage (shown in the browser tab).</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">style</span> CSS Rules</h4>
+                <p>Contains CSS rules for styling the page. Defines how elements should look.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">body</span> Visible Content</h4>
+                <p>Contains all the content that is visible on the webpage. Images, text, links, lists, etc. go here.</p>
+            </div>
+            
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">echo "HTML provides the structure of web pages"</span></div>
+                    <div class="command-output">HTML provides the structure of web pages</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16: Structural Elements -->
+        <div class="slide">
+            <h1>Structural Elements</h1>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">header</span> Page Header</h4>
+                <p>Represents introductory content or a set of navigational links. Usually contains the site title, logo, or navigation. Found at the top of the page with the "Saitama" heading.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">main</span> Main Content</h4>
+                <p>Represents the dominant content of the body. There should be only one <span class="html-tag">main</span> element per page. Contains the image carousel and information about Saitama.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">footer</span> Page Footer</h4>
+                <p>Represents a footer for a document or section. Typically contains author information, copyright, or contact info. Found at the bottom with "Made with ❤️ in WWW Bootcamp".</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">div</span> Generic Container</h4>
+                <p>A generic container for flow content. Has no effect on content or layout until styled with CSS. Used to group elements for styling purposes. Look for the "hero-card" div that contains the image and info sections.</p>
+            </div>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Semantic HTML</h3>
+                <p>Using appropriate structural elements like <span class="html-tag">header</span>, <span class="html-tag">main</span>, and <span class="html-tag">footer</span> makes your code more meaningful and accessible.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Content Elements -->
+        <div class="slide">
+            <h1>Content Elements</h1>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">h1</span> through <span class="html-tag">h6</span> Headings</h4>
+                <p>Headings, with <span class="html-tag">h1</span> being the most important. Used to structure content hierarchically. Should be used in order (don't skip from <span class="html-tag">h1</span> to <span class="html-tag">h3</span>). Examples: "Saitama" (h1), "About Me" (h2), "My Powers" (h3).</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">p</span> Paragraph</h4>
+                <p>Represents a paragraph of text. Block-level element with space above and below. Contains the description of Saitama's training routine.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">img</span> Image</h4>
+                <p>Embeds an image in the document. Must have <span class="code-inline">src</span> (source) and <span class="code-inline">alt</span> (alternative text) attributes. Self-closing tag. The Saitama images in the carousel.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">ul</span> and <span class="html-tag">li</span> Lists</h4>
+                <p><span class="html-tag">ul</span>: Unordered list (bullet points). <span class="html-tag">li</span>: List item. Used for grouping related items. The list of Saitama's powers.</p>
+            </div>
+            
+            <div class="element-card">
+                <h4><span class="html-tag">button</span> Button</h4>
+                <p>Represents a clickable button. Can be used in forms or anywhere a clickable action is needed. Can contain text or images. The "Contact Me" button.</p>
+            </div>
+            
+            <div class="terminal">
+                <div class="terminal-header">
+                    <div class="terminal-dot dot-red"></div>
+                    <div class="terminal-dot dot-yellow"></div>
+                    <div class="terminal-dot dot-green"></div>
+                </div>
+                <div class="terminal-content">
+                    <div><span class="command-prompt">$</span> <span class="command">echo "Content elements give meaning to your text and media"</span></div>
+                    <div class="command-output">Content elements give meaning to your text and media</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18: Developer Tools -->
+        <div class="slide">
+            <h1>Using Developer Tools (F12)</h1>
+            
+            <h2>How to Open Developer Tools</h2>
+            <div class="dev-tools-steps">
+                <ol>
+                    <li>Right-click on any element on a webpage and select "Inspect" or "Inspect Element"</li>
+                    <li>Or press F12 on your keyboard</li>
+                    <li>Or use Ctrl+Shift+I (Windows/Linux) or Cmd+Option+I (Mac)</li>
+                </ol>
+            </div>
+            
+            <h2>What You Can Do</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-search"></i> Inspect Elements</h3>
+                    <p>See which HTML tags create different parts of the page</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-palette"></i> View Styles</h3>
+                    <p>See CSS rules applied to elements</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-edit"></i> Edit HTML</h3>
+                    <p>Modify the page structure in real-time</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-bug"></i> Debug JavaScript</h3>
+                    <p>Check for errors and debug code</p>
+                </div>
+                <div class="card">
+                    <h3><i class="fas fa-network-wired"></i> Network Monitoring</h3>
+                    <p>See what files the page loads</p>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Pro Tip</h3>
+                <p>Developer Tools are your best friend for understanding how web pages work. Spend time exploring them to become a better developer!</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Best Practices & Next Steps -->
+        <div class="slide">
+            <h1>Best Practices</h1>
+            
+            <div class="best-practices">
+                <h4><i class="fas fa-check-circle"></i> Semantic HTML</h4>
+                <p>Use appropriate tags for their intended purpose</p>
+            </div>
+            
+            <div class="best-practices">
+                <h4><i class="fas fa-check-circle"></i> Proper Nesting</h4>
+                <p>Make sure tags are properly opened and closed</p>
+            </div>
+            
+            <div class="best-practices">
+                <h4><i class="fas fa-check-circle"></i> Accessibility</h4>
+                <p>Always include <span class="code-inline">alt</span> attributes for images</p>
+            </div>
+            
+            <div class="best-practices">
+                <h4><i class="fas fa-check-circle"></i> Hierarchy</h4>
+                <p>Use heading tags in order (h1 → h2 → h3, etc.)</p>
+            </div>
+            
+            <div class="best-practices">
+                <h4><i class="fas fa-check-circle"></i> Validation</h4>
+                <p>Ensure your HTML is valid and well-formed</p>
+            </div>
+            
+            <h2>Next Steps</h2>
+            <p>After exploring these elements:</p>
+            <ol class="practice-steps">
+                <li>Try modifying HTML in Developer Tools to see immediate changes</li>
+                <li>Look at how CSS styles are applied to different elements</li>
+                <li>Notice how structure relates to the visual layout</li>
+                <li>Experiment with hiding/showing elements</li>
+                <li>Understand how JavaScript interacts with HTML elements</li>
+            </ol>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Remember</h3>
+                <p>This exploration will help you understand how web pages are built and how you can modify them in your own projects.</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: HTML Exploration Exercise -->
+        <div class="slide">
+            <h1>HTML Exploration Exercise</h1>
+            
+            <div class="exercise-container">
+                <h2><i class="fas fa-laptop-code"></i> Let's Tweak Some HTML!</h2>
+                <p>Now it's time to get hands-on! Open your Saitama portfolio and experiment with HTML elements. Remember: <strong>we're not creating a new portfolio, just exploring how elements work together!</strong></p>
+                
+                <ol class="exercise-steps">
+                    <li>
+                        <strong>Add More Paragraphs</strong>
+                        <p>Find the "About Me" section and add a new paragraph describing Saitama's daily routine. Use the <span class="html-tag">p</span> tag.</p>
+                    </li>
+                    <li>
+                        <strong>Experiment with Headings</strong>
+                        <p>Add a new <span class="html-tag">h3</span> heading called "Training Schedule" under the existing content. Try changing an existing <span class="html-tag">h2</span> to <span class="html-tag">h3</span> and see the difference.</p>
+                    </li>
+                    <li>
+                        <strong>Create a New List</strong>
+                        <p>Add an unordered list (<span class="html-tag">ul</span>) with list items (<span class="html-tag">li</span>) for Saitama's training exercises. Each exercise should be a list item.</p>
+                    </li>
+                    <li>
+                        <strong>Modify Existing Text</strong>
+                        <p>Double-click on any text in the Elements panel and change it. Try updating the "About Me" text to something creative.</p>
+                    </li>
+                    <li>
+                        <strong>Add a New Section</strong>
+                        <p>Create a new <span class="html-tag">div</span> with a heading and content about Saitama's favorite foods. Give it an ID like "favorite-foods".</p>
+                    </li>
+                    <li>
+                        <strong>Experiment with Images</strong>
+                        <p>Find an <span class="html-tag">img</span> tag and change its <span class="code-inline">src</span> attribute to see a different image. Note how the <span class="code-inline">alt</span> text provides context.</p>
+                    </li>
+                </ol>
+            </div>
+            
+            <div class="experiment-box">
+                <h4><i class="fas fa-flask"></i> Try These Experiments:</h4>
+                <ul>
+                    <li>Change the heading hierarchy and see how it affects the page structure</li>
+                    <li>Add nested lists (lists inside lists) to see how they render</li>
+                    <li>Modify the button text and see how it updates immediately</li>
+                    <li>Try adding <span class="code-inline">style</span> attributes directly to elements (inline styles)</li>
+                    <li>Experiment with text formatting using <span class="html-tag">strong</span> and <span class="html-tag">em</span> tags</li>
+                </ul>
+            </div>
+            
+            <div class="remember-box">
+                <h4><i class="fas fa-info-circle"></i> Important Notes:</h4>
+                <ul>
+                    <li>Changes made in Developer Tools are <strong>temporary</strong> - refresh the page to reset them</li>
+                    <li>Pay attention to how elements are <strong>nested</strong> inside each other</li>
+                    <li>Notice how different elements create the visual structure you see</li>
+                    <li>Don't worry about making it perfect - this is exploration!</li>
+                </ul>
+            </div>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Learning Goal</h3>
+                <p>This exercise helps you understand how HTML elements work together to create web pages. The more you experiment, the better you'll understand the structure!</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: CSS Introduction -->
+ 
+        <div class="slide">
+            <h1>CSS Exploration - Saitama Portfolio</h1>
+            
+            <h2>What is CSS?</h2>
+            <p>CSS (Cascading Style Sheets) is the language used to describe the presentation of web pages. It controls how HTML elements look - their colors, fonts, spacing, layout, and animations.</p>
+            
+            <h2>CSS in the Saitama Portfolio</h2>
+            <p>In the Saitama portfolio, CSS is contained within the <span class="html-tag">&lt;style&gt;</span> tags in the <span class="html-tag">&lt;head&gt;</span> section of the HTML document. This is called "internal CSS".</p>
+            
+            <h2>CSS Structure</h2>
+            <p>CSS consists of <strong>rules</strong> that have this format:</p>
+            
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="selector">selector</span> {
+                      <ul>
+                        <li class="no-bullet"></li><span class="property">property</span>: <span class="value">value</span>;</li>
+                        <li class="no-bullet"></li><span class="property">property</span>: <span class="value">value</span>;</li>
+                      </ul>
+                    }
+                </div>
+            </div>
+            
+            <p>Example from Saitama's portfolio:</p>
+            
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="selector">header</span> {
+                    <ul>
+                      <li class="no-bullet"></li><span class="property">text-align:</span><span class="value">center</span>;
+                      <li class="no-bullet"></li><span class="property">padding</span>: <span class="value">2rem 1rem</span>;
+                      <li class="no-bullet"></li><span class="property">background</span>: <span class="value">linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)</span>;
+                      <li class="no-bullet"></li><span class="property">color</span>: <span class="value">white</span>;
+                    </ul>
+                    }
+                </div>
+            </div>
+            
+            <h2>CSS Selectors</h2>
+            <p>Selectors are patterns used to select HTML elements you want to style:</p>
+            
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4><span class="css-selector">Element Selectors</span></h4>
+                    <ul>
+                        <li><span class="css-selector">header</span> - Selects all <span class="html-tag">&lt;header&gt;</span> elements</li>
+                        <li><span class="css-selector">body</span> - Selects <span class="html-tag">&lt;body&gt;</span> element</li>
+                        <li><span class="css-selector">h1</span> - Selects all <span class="html-tag">&lt;h1&gt;</span> elements</li>
+                        <li><span class="css-selector">button</span> - Selects all <span class="html-tag">&lt;button&gt;</span> elements</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4><span class="css-selector">Class Selectors</span></h4>
+                    <ul>
+                        <li><span class="css-selector">.hero-card</span> - Selects elements with <span class="code-inline">class="hero-card"</span></li>
+                        <li><span class="css-selector">.info</span> - Selects elements with <span class="code-inline">class="info"</span></li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4><span class="css-selector">ID Selectors</span></h4>
+                    <ul>
+                        <li><span class="css-selector">#nav-btn</span> - Selects element with <span class="code-inline">id="contact-btn"</span></li>
+                        <li><span class="css-selector">#contact-modal</span> - Selects element with <span class="code-inline">id="contact-modal"</span></li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4><span class="css-selector">Pseudo-selectors</span></h4>
+                    <ul>
+                        <li><span class="css-selector">button:hover</span> - Styles applied when hovering over buttons</li>
+                        <li><span class="css-selector">button.active</span> - Styles for buttons with the "active" class</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>CSS Properties in Saitama Portfolio</h2>
+            
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>Colors and Backgrounds</h4>
+                    <ul>
+                        <li class="no-bullet"><span class="css-selector">color</span> - Text color (e.g., <span class="value2">color: white</span>;</li>
+                        <li class="no-bullet"><span class="css-selector">background-color</span> - Background color of an element</li>
+                        <li class="no-bullet"><span class="css-selector">background</span> - Complex backgrounds (like gradients)</li>
+                        <li class="no-bullet"><span class="css-selector">--accent: #ff4757</span> - CSS variable for consistent color usage</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Typography</h4>
+                    <ul>
+                        <li class="no-bullet"><span class="css-selector">font-family</span> - Font type (e.g., <span class="value2">'Segoe UI', Tahoma, Geneva, Verdana, sans-serif</span>)</li>
+                        <li class="no-bullet"><span class="css-selector">font-size</span> - Size of text (e.g., <span class="value2">2.8rem</span>, <span class="value2">1.2rem</span>)</li>
+                        <li class="no-bullet"><span class="css-selector">text-shadow</span> - Shadow effect for text</li>
+                        <li class="no-bullet"><span class="css-selector">line-height</span> - Space between lines of text</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Box Model Properties</h4>
+                    <ul>
+                        <li class="no-bullet"><span class="css-selector">margin</span> - Space outside an element</li>
+                        <li class="no-bullet"><span class="css-selector">padding</span> - Space inside an element</li>
+                        <li class="no-bullet"><span class="css-selector">border</span> - Border around an element</li>
+                        <li class="no-bullet"><span class="css-selector">border-radius</span> - Rounded corners (e.g., <span class="value2">border-radius: 16px</span>;</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Layout</h4>
+                    <ul>
+                        <li class="no-bullet"><span class="css-selector">display</span> - How an element is displayed (<span class="value2">flex</span>, <span class="value2">block</span>, <span class="value2">none</span>, etc.)</li>
+                        <li class="no-bullet"><span class="css-selector">position</span> - Positioning method (<span class="value2">relative</span>, <span class="value2">absolute</span>, <span class="value2">fixed</span>)</li>
+                        <li class="no-bullet"><span class="css-selector">width</span> and <span class="value2">height</span> - Dimensions of elements</li>
+                        <li class="no-bullet"><span class="css-selector">max-width</span> - Maximum width an element can have</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Flexbox (Modern Layout)</h4>
+                    <ul>
+                        <li class="no-bullet"><span class="css-selector">display: flex</span> - Makes container a flex container</li>
+                        <li class="no-bullet"><span class="css-selector">flex-direction</span> - Direction of flex items (<span class="value2">row</span>, <span class="value2">column</span>)</li>
+                        <li class="no-bullet"><span class="css-selector">justify-content</span> - Alignment along main axis</li>
+                        <li class="no-bullet"><span class="css-selector">align-items</span> - Alignment along cross axis</li>
+                        <li class="no-bullet"><span class="css-selector">gap</span> - Space between flex items</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>Responsive Design</h2>
+            
+            <h3>Media Queries</h3>
+            
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="media-query-breakpoint">@media (min-width: 600px)</span> {
+                      <div><span class="selector">.hero-card</span></div>{
+                        <span class="property">flex-direction</span>: <span class="value">row</span>;
+                      }
+                    }
+                </div>
+            </div>
+            
+            <p>This changes the layout when the screen is at least 600px wide.</p>
+            
+            <h2>CSS Variables (Custom Properties)</h2>
+            
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="selector">:root</span> {
+                        <ul>
+                      <li class="no-bullet"></li><span class="property">--bg</span>: <span class="value">#f9f9fb</span>;
+                      <li class="no-bullet"></li><span class="property">--text</span>: <span class="value">#2d2b3a</span>;
+                      <li class="no-bullet"></li><span class="property">--accent</span>: <span class="value">#ff4757</span>;
+                      <li class="no-bullet"></li><span class="property">--card-bg</span>: <span class="value">#ffffff</span>;
+                      <li class="no-bullet"></li><span class="property">--shadow</span>: <span class="value">rgba(0, 0, 0, 0.1)</span>;
+                      </ul>
+                    }
+                </div>
+            </div>
+            
+            <p>These variables allow consistent color usage throughout the site:</p>
+            <ul>
+                <li><span class="code-inline">var(--accent)</span> is used for the accent color (#ff4757)</li>
+                <li><span class="code-inline">var(--bg)</span> is the background color</li>
+                <li><span class="code-inline">var(--text)</span> is the text color</li>
+            </ul>
+            
+            <h2>Animations and Transitions</h2>
+            
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>Transitions</h4>
+                    <div class="css-example">
+                        <div class="css-code">
+                            <span class="selector">#contact-btn</span> {
+                              <span class="property">transition</span>: <span class="value">all 0.3s ease</span>;
+                            }
+                        </div>
+                    </div>
+                    <p>This creates smooth animations when the button state changes.</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Keyframe Animations</h4>
+                    <div class="css-example">
+                        <div class="css-code">
+                            <span class="keyframe">@keyframes popIn</span> {
+                                <ul>
+                                    <li class="no-bullet"></li><span class="property">from</span> { <span class="property">transform</span>: <span class="value">scale(0.8)</span>; <span class="property">opacity</span>: <span class="value">0</span>; }
+                                    <li class="no-bullet"></li><span class="property">to</span> { <span class="property">transform</span>: <span class="value">scale(1)</span>; <span class="property">opacity</span>: <span class="value">1</span>; }
+                              </ul>
+                            }
+                        </div>
+                    </div>
+                    <p>This creates the modal pop-in effect.</p>
+                </div>
+            </div>
+            
+            <h2>Exploring CSS with Developer Tools</h2>
+            
+            <h3>How to Explore CSS</h3>
+            <ol>
+                <li>Open Developer Tools (F12)</li>
+                <li>Select an element on the page</li>
+                <li>Look at the "Styles" panel on the right</li>
+                <li>See all CSS rules applied to that element</li>
+                <li>Edit properties to see real-time changes</li>
+            </ol>
+            
+            <h3>Things to Try</h3>
+            <ol>
+                <li>Change the accent color from <span class="code-inline">#ff4757</span> to another color</li>
+                <li>Modify the border-radius of cards</li>
+                <li>Adjust font sizes</li>
+                <li>Change the gradient colors in the header</li>
+                <li>Modify the spacing (padding/margin) of elements</li>
+            </ol>
+            
+            <h2>CSS Specificity and Cascade</h2>
+            
+            <p>CSS follows the "Cascading" principle:</p>
+            <ol>
+                <li>Inline styles (in HTML) have highest priority</li>
+                <li>ID selectors (#id)</li>
+                <li>Class selectors (.class)</li>
+                <li>Element selectors (div, p, h1)</li>
+            </ol>
+            
+            <p>When multiple rules apply to the same element, the one with higher specificity wins.</p>
+            
+            <h2>CSS in Saitama Portfolio - Key Features</h2>
+            
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>Gradient Background</h4>
+                    <div class="css-example">
+                        <div class="css-code">
+                            <span class="selector">background</span>: <span class="value">linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%)</span>;
+                        </div>
+                    </div>
+                    <p>Creates the colorful header background.</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Card Design</h4>
+                    <div class="css-example">
+                        <div class="css-code">
+                            <span class="selector">.hero-card</span> {
+                                <ul>
+                                    <li class="no bullet"></li><span class="property">background</span>: <span class="value">var(--card-bg)</span>;
+                                    <li class="no bullet"></li><span class="property">border-radius</span>: <span class="value">16px</span>;
+                                    <li class="no bullet"></li><span class="property">box-shadow</span>: <span class="value">0 6px 20px var(--shadow)</span>;
+                                    <li class="no bullet"></li><span class="property">overflow</span>: <span class="value">hidden</span>;
+                              </ul>
+                            }
+                        </div>
+                    </div>
+                    <p>Gives the content area a modern card appearance.</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Responsive Flexbox Layout</h4>
+                    <div class="css-example">
+                        <div class="css-code">
+                            <span class="selector">.hero-card</span> {
+                                <ul>
+                              <li class="no bullet"></li></button></button><span class="property">display</span>: <span class="value">flex</span>;
+                              <li class="no bullet"></li><span class="property">flex-direction</span>: <span class="value">column</span>;
+                              </ul>
+                            }
+                            
+                            <span class="media-query-breakpoint">@media (min-width: 600px)</span> {
+                              <span class="selector">.hero-card</span> {
+                                <ul>
+                                <li class="no bullet"></li><span class="property">flex-direction</span>: <span class="value">row</span>;
+                                </ul>
+                              }
+                            }
+                        </div>
+                    </div>
+                    <p>Makes the layout adapt to different screen sizes.</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Interactive Elements</h4>
+                    <div class="css-example">
+                        <div class="css-code">
+                            <span class="selector">#contact-btn:hover</span> {
+                                <ul>
+                                    <li class="no button"></li><span class="property">background-color</span>: <span class="value">#e03a47</span>;
+                                    <li class="no button"></li><span class="property">transform</span>: <span class="value">translateY(-2px)</span>;
+                                    <li class="nobutton"></li><span class="property">box-shadow</span>: <span class="value">0 4px 8px rgba(255, 71, 87, 0.3)</span>;
+                              </ul>
+                            }
+                        </div>
+                    </div>
+                    <p>Creates interactive feedback when hovering over the button.</p>
+                </div>
+            </div>
+            
+            <h2>Best Practices Observed</h2>
+            
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>CSS Variables</h4>
+                    <p>For consistent theming</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Mobile-First Design</h4>
+                    <p>Base styles for mobile, media queries for larger screens</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Semantic Class Names</h4>
+                    <p>Clear, descriptive class names like "hero-card", "info"</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Box Shadow Effects</h4>
+                    <p>Subtle shadows for depth</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Smooth Transitions</h4>
+                    <p>For better user experience</p>
+                </div>
+            </div>
+            
+            <h2>Next Steps</h2>
+            
+            <p>After exploring CSS in the Saitama portfolio:</p>
+            <ol>
+                <li>Try changing colors and see how CSS variables make it easy to maintain consistency</li>
+                <li>Modify the flexbox layout to understand how it works</li>
+                <li>Experiment with media queries by resizing your browser window</li>
+                <li>Try adding new CSS rules to elements</li>
+                <li>Observe how changes to one CSS rule can affect multiple elements</li>
+            </ol>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Learning Goal</h3>
+                <p>This exploration will help you understand how to style web pages and make them visually appealing.</p>
+            </div>
+        </div>
+
+            <!-- Slide 22: JavaScript Introduction -->
+        <div class="slide">
+            <h1>JavaScript in the Saitama Portfolio</h1>
+            
+            <h2>What is JavaScript?</h2>
+            <p>JavaScript (JS) is a programming language that makes web pages interactive and dynamic. While HTML provides structure and CSS provides styling, JavaScript adds behavior to web pages.</p>
+            
+            <h2>The Role of JavaScript in Web Development</h2>
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>Interactivity</h4>
+                    <p>Respond to user actions (clicks, hovers, form submissions)</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Dynamic Content</h4>
+                    <p>Modify HTML and CSS in real-time</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Data Handling</h4>
+                    <p>Process and manipulate data</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Animations</h4>
+                    <p>Create smooth transitions and effects</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>API Integration</h4>
+                    <p>Communicate with external services</p>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Form Validation</h4>
+                    <p>Check user input before submission</p>
+                </div>
+            </div>
+            
+            <h2>JavaScript in the Saitama Portfolio</h2>
+            <p>In the Saitama portfolio, JavaScript is responsible for:</p>
+            <ol>
+                <li><strong>Image Carousel</strong> - Switching between different Saitama images</li>
+                <li><strong>Modal Dialog</strong> - Showing and hiding the contact information</li>
+                <li><strong>Navigation Dots</strong> - Indicating which image is currently displayed</li>
+                <li><strong>Interactive Elements</strong> - Button hover effects and click responses</li>
+            </ol>
+        </div>
+        
+        <!-- Slide 23: Key JavaScript Concepts -->
+        <div class="slide">
+            <h1>Key JavaScript Concepts in This Project</h1>
+            
+            <h2>Variables</h2>
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="comment">// Stores array of image paths</span><br>
+                    <span class="keyword">const</span> <span class="variable">imageUrls</span> = [ ... ];<br>
+                    <span class="comment">// Tracks currently displayed image</span><br>
+                    <span class="keyword">let</span> <span class="variable">currentImageIndex</span> = <span class="number">0</span>;<br>
+                    <span class="comment">// References HTML elements</span><br>
+                    <span class="keyword">const</span> <span class="variable">heroImg</span> = <span class="method">document.getElementById</span>(<span class="string">'hero-img'</span>);
+                </div>
+            </div>
+            
+            <h2>DOM Manipulation</h2>
+            <p>JavaScript interacts with HTML elements through the Document Object Model (DOM):</p>
+            <ul>
+                <li><code>document.getElementById()</code> - Gets an element by its ID</li>
+                <li><code>document.createElement()</code> - Creates new HTML elements</li>
+                <li><code>element.addEventListener()</code> - Listens for user events</li>
+            </ul>
+            
+            <h2>Event Listeners</h2>
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="method">document.getElementById</span>(<span class="string">'contact-btn'</span>).<span class="method">addEventListener</span>(<span class="string">'click'</span>, () => {<br>
+                    &nbsp;&nbsp;<span class="comment">// Show contact modal when button is clicked</span><br>
+                    });
+                </div>
+            </div>
+            
+            <h2>Functions</h2>
+            <p>Reusable blocks of code that perform specific tasks:</p>
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="keyword">function</span> <span class="method">showImage</span>(<span class="variable">index</span>) {<br>
+                    &nbsp;&nbsp;<span class="comment">// Code to display a specific image</span><br>
+                    }
+                </div>
+            </div>
+            
+            <h2>Arrays and Loops</h2>
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="variable">imageUrls</span>.<span class="method">forEach</span>((<span class="variable">_</span>, <span class="variable">index</span>) => {<br>
+                    &nbsp;&nbsp;<span class="comment">// Create navigation dots for each image</span><br>
+                    });
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 24: Detailed JavaScript Features -->
+        <div class="slide">
+            <h1>Detailed Breakdown of JavaScript Features</h1>
+            
+            <h2>1. Image Carousel System</h2>
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>How it works:</h4>
+                    <ul>
+                        <li>Stores image paths in an array</li>
+                        <li>Tracks the current image index</li>
+                        <li>Provides navigation between images</li>
+                        <li>Updates visual indicators (dots)</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Key components:</h4>
+                    <ul>
+                        <li><code>imageUrls</code> array containing image paths</li>
+                        <li><code>currentImageIndex</code> variable tracking position</li>
+                        <li><code>showImage()</code> function to display specific images</li>
+                        <li>Navigation dots created dynamically</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>2. Modal Dialog</h2>
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>How it works:</h4>
+                    <ul>
+                        <li>Hidden by default using CSS (<code>display: none</code>)</li>
+                        <li>Appears when contact button is clicked</li>
+                        <li>Can be closed by clicking the X or outside the modal</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Key components:</h4>
+                    <ul>
+                        <li>Event listener on contact button to show modal</li>
+                        <li>Event listener on close button to hide modal</li>
+                        <li>Window click listener to close modal when clicking outside</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h2>3. Navigation Dots</h2>
+            <div class="grid">
+                <div class="css-property-card">
+                    <h4>How it works:</h4>
+                    <ul>
+                        <li>Created dynamically for each image</li>
+                        <li>Highlight the active image</li>
+                        <li>Allow direct navigation to specific images</li>
+                    </ul>
+                </div>
+                
+                <div class="css-property-card">
+                    <h4>Key components:</h4>
+                    <ul>
+                        <li>Dynamic button creation with <code>document.createElement()</code></li>
+                        <li>CSS classes to indicate active state</li>
+                        <li>Click handlers for navigation</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 25: JavaScript Execution Flow -->
+        <div class="slide">
+            <h1>JavaScript Execution Flow</h1>
+            
+            <ol>
+                <li><strong>Page Load</strong> - JavaScript initializes when the page loads</li>
+                <li><strong>Setup</strong> - Creates navigation dots and shows first image</li>
+                <li><strong>Event Listening</strong> - Waits for user interactions</li>
+                <li><strong>Response</strong> - Updates the page based on user actions</li>
+            </ol>
+            
+            <h2>Exploring JavaScript with Developer Tools</h2>
+            
+            <h3>How to Explore JavaScript</h3>
+            <ol>
+                <li>Open Developer Tools (F12)</li>
+                <li>Go to the "Sources" or "Debugger" tab</li>
+                <li>Find your JavaScript file (bundle.js in this case, or look in the HTML)</li>
+                <li>Set breakpoints to pause execution</li>
+                <li>Use the "Console" tab to test JavaScript commands</li>
+            </ol>
+            
+            <h3>Console Exploration</h3>
+            <p>In the Console tab, you can:</p>
+            <ul>
+                <li>Type JavaScript commands directly</li>
+                <li>Inspect variables: <code>imageUrls</code></li>
+                <li>Test functions: <code>showImage(1)</code></li>
+                <li>Modify page elements: <code>document.body.style.backgroundColor = 'red'</code></li>
+            </ul>
+        </div>
+        
+        <!-- Slide 26: JavaScript Concepts and Best Practices -->
+        <div class="slide">
+            <h1>Important JavaScript Concepts Demonstrated</h1>
+            
+            <h2>Scope</h2>
+            <ul>
+                <li><code>const</code> and <code>let</code> define variable scope</li>
+                <li><code>const</code> for values that won't change</li>
+                <li><code>let</code> for values that will change</li>
+            </ul>
+            
+            <h2>Arrow Functions</h2>
+            <div class="css-example">
+                <div class="css-code">
+                    () => { <span class="comment">/* code */</span> }
+                </div>
+            </div>
+            <p>Modern way to write functions, used in event listeners.</p>
+            
+            <h2>Template Literals</h2>
+            <div class="css-example">
+                <div class="css-code">
+                    `Go to image ${index + <span class="number">1</span>}`
+                </div>
+            </div>
+            <p>Allows embedding variables in strings with backticks.</p>
+            
+            <h2>Array Methods</h2>
+            <ul>
+                <li><code>forEach()</code> - Executes a function for each array element</li>
+                <li><code>querySelectorAll()</code> - Returns a list of elements matching a selector</li>
+            </ul>
+            
+            <h2>Error Handling</h2>
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="variable">img</span>.<span class="property">onerror</span> = () => {<br>
+                    &nbsp;&nbsp;<span class="variable">heroImg</span>.<span class="property">src</span> = <span class="variable">fallbackImage</span>;<br>
+                    };
+                </div>
+            </div>
+            <p>Provides fallback behavior when something goes wrong.</p>
+            
+            <h2>Best Practices Demonstrated</h2>
+            <ol>
+                <li><strong>Unobtrusive JavaScript</strong> - Behavior separated from HTML structure</li>
+                <li><strong>Progressive Enhancement</strong> - Works without JavaScript, enhanced with it</li>
+                <li><strong>Error Handling</strong> - Fallback images when loading fails</li>
+                <li><strong>Event Delegation</strong> - Efficient event handling</li>
+                <li><strong>Modular Code</strong> - Functions with single responsibilities</li>
+            </ol>
+        </div>
+        
+        <!-- Slide 27: Modern JavaScript and Experimentation -->
+        <div class="slide">
+            <h1>Modern JavaScript Features Used</h1>
+            
+            <h2>ES6+ Features</h2>
+            <ul>
+                <li><code>const</code> and <code>let</code> variable declarations</li>
+                <li>Arrow functions <code>=></code></li>
+                <li>Template literals with <code>${}</code></li>
+                <li><code>forEach()</code> array method</li>
+                <li>Modules (in the build process)</li>
+            </ul>
+            
+            <h2>How to Experiment with JavaScript</h2>
+            
+            <h3>Try These in the Console:</h3>
+            <ol>
+                <li>Type <code>imageUrls</code> to see the array of images</li>
+                <li>Try <code>showImage(1)</code> to display the second image</li>
+                <li>Change <code>currentImageIndex</code> to a different number</li>
+                <li>Test <code>document.getElementById('hero-img').src = 'https://placehold.co/300x400'</code></li>
+            </ol>
+            
+            <h3>Modify the Code:</h3>
+            <ol>
+                <li>Add more images to the <code>imageUrls</code> array</li>
+                <li>Change the animation speed</li>
+                <li>Add new interactive elements</li>
+                <li>Modify the modal content</li>
+            </ol>
+            
+            <h2>JavaScript in the Development Process</h2>
+            
+            <h3>Build Process</h3>
+            <p>In this project, we use webpack to:</p>
+            <ol>
+                <li>Bundle all JavaScript into a single file</li>
+                <li>Convert modern JavaScript to browser-compatible code</li>
+                <li>Optimize code for production</li>
+            </ol>
+            
+            <h3>Development vs Production</h3>
+            <ul>
+                <li><strong>Development</strong>: Easy to read and debug code</li>
+                <li><strong>Production</strong>: Minified and optimized code</li>
+            </ul>
+        </div>
+        
+        <!-- Slide 28: JavaScript Next Steps -->
+        <div class="slide">
+            <h1>Next Steps</h1>
+            
+            <p>After exploring JavaScript in the Saitama portfolio:</p>
+            <ol>
+                <li>Try adding a new feature like automatic image rotation</li>
+                <li>Add keyboard navigation (arrow keys for carousel)</li>
+                <li>Implement image preloading for smoother transitions</li>
+                <li>Add more interactive elements</li>
+                <li>Experiment with animations and transitions</li>
+            </ol>
+            
+            <div class="tip-box">
+                <h3><i class="fas fa-lightbulb"></i> Learning Goal</h3>
+                <p>This exploration will help you understand how to make web pages interactive and dynamic using JavaScript.</p>
+            </div>
+            
+            <h2>JavaScript Resources</h2>
+            <ul>
+                <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">MDN JavaScript Guide</a></li>
+                <li><a href="https://javascript.info/" target="_blank">JavaScript.info</a></li>
+                <li><a href="https://eloquentjavascript.net/" target="_blank">Eloquent JavaScript (Free Book)</a></li>
+            </ul>
+        </div>
+
+    <!-- Table of Contents Button -->
+    <button class="toc-btn" id="tocBtn">
+        <i class="fas fa-list"></i>
+    </button>
+
+    <!-- Table of Contents Panel -->
+    <div class="toc-panel" id="tocPanel">
+        <button class="toc-close" id="tocClose">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2 class="toc-title">Table of Contents</h2>
+        
+        <div class="toc-section">
+            <div class="toc-section-title" data-section="welcome">
+                <span>Welcome</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="toc-section-content active">
+                <div class="toc-item" data-slide="0">Welcome to WWW Bootcamp</div>
+                <div class="toc-item" data-slide="1">Course Topics</div>
+            </div>
+        </div>
+        
+        <div class="toc-section">
+            <div class="toc-section-title" data-section="cli">
+                <span>Command Line Interface</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="toc-section-content active">
+                <div class="toc-item" data-slide="2">CLI Introduction</div>
+                <div class="toc-item" data-slide="3">What is CLI?</div>
+                <div class="toc-item" data-slide="4">Why Use Command Line?</div>
+                <div class="toc-item" data-slide="5">Modern Terminals</div>
+                <div class="toc-item" data-slide="6">Basic Commands</div>
+                <div class="toc-item" data-slide="7">File Content Commands</div>
+                <div class="toc-item" data-slide="8">Git Commands</div>
+                <div class="toc-item" data-slide="9">GitHub CLI Commands</div>
+                <div class="toc-item" data-slide="10">Useful Tips</div>
+                <div class="toc-item" data-slide="11">Practice Exercise</div>
+            </div>
+        </div>
+        
+        <div class="toc-section">
+            <div class="toc-section-title" data-section="portfolio">
+                <span>Portfolio Project</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="toc-section-content active">
+                <div class="toc-item" data-slide="12">Saitama Portfolio Setup</div>
+            </div>
+        </div>
+        
+        <div class="toc-section">
+            <div class="toc-section-title" data-section="html">
+                <span>HTML</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="toc-section-content active">
+                <div class="toc-item" data-slide="13">HTML Elements Exploration</div>
+                <div class="toc-item" data-slide="14">What is HTML? & Document Structure</div>
+                <div class="toc-item" data-slide="15">Structural Elements</div>
+                <div class="toc-item" data-slide="16">Content Elements</div>
+                <div class="toc-item" data-slide="17">Developer Tools</div>
+                <div class="toc-item" data-slide="18">Best Practices & Next Steps</div>
+                <div class="toc-item" data-slide="19">HTML Exploration Exercise</div>
+            </div>
+        </div>
+        
+        <div class="toc-section">
+            <div class="toc-section-title" data-section="css">
+                <span>CSS</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="toc-section-content active">
+                <div class="toc-item" data-slide="20">CSS Exploration - Saitama Portfolio</div>
+            </div>
+        </div>
+        
+                <div class="toc-section">
+            <div class="toc-section-title" data-section="js">
+                <span>JavaScript</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="toc-section-content">
+                <div class="toc-item" data-slide="22">JavaScript in the Saitama Portfolio</div>
+                <div class="toc-item" data-slide="23">Key JavaScript Concepts</div>
+                <div class="toc-item" data-slide="24">Detailed JavaScript Features</div>
+                <div class="toc-item" data-slide="25">JavaScript Execution Flow</div>
+                <div class="toc-item" data-slide="26">JavaScript Concepts & Best Practices</div>
+                <div class="toc-item" data-slide="27">Modern JavaScript & Experimentation</div>
+                <div class="toc-item" data-slide="28">JavaScript Next Steps</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="navigation">
+        <button class="nav-btn" id="prevBtn">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="nav-btn" id="nextBtn">
+            <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <div class="slide-indicator">
+        <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+    </div>
+
+    <div class="keyboard-hint">
+        <i class="fas fa-keyboard"></i> Use arrow keys to navigate
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const currentSlideEl = document.getElementById('currentSlide');
+            const totalSlidesEl = document.getElementById('totalSlides');
+            const tocBtn = document.getElementById('tocBtn');
+            const tocPanel = document.getElementById('tocPanel');
+            const tocClose = document.getElementById('tocClose');
+            const tocSectionTitles = document.querySelectorAll('.toc-section-title');
+            const tocItems = document.querySelectorAll('.toc-item');
+            const topicCards = document.querySelectorAll('.topic-card');
+            
+            let currentSlide = 0;
+            totalSlidesEl.textContent = slides.length;
+            
+            // Define topic start indices
+            const topicStartIndices = {
+                'cli': 2,
+                'portfolio': 12,
+                'html': 13,
+                'css': 20,
+                'js': 22
+            };
+            
+            function showSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.remove('active', 'prev');
+                    if (i < index) {
+                        slide.classList.add('prev');
+                    } else if (i === index) {
+                        slide.classList.add('active');
+                    }
+                });
+                
+                currentSlideEl.textContent = index + 1;
+                
+                // Update TOC active item
+                tocItems.forEach(item => {
+                    item.classList.remove('active');
+                    if (parseInt(item.getAttribute('data-slide')) === index) {
+                        item.classList.add('active');
+                    }
+                });
+                
+                // Disable/enable navigation buttons
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === slides.length - 1;
+            }
+            
+            function nextSlide() {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            function prevSlide() {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            }
+            
+            // Event listeners
+            nextBtn.addEventListener('click', nextSlide);
+            prevBtn.addEventListener('click', prevSlide);
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'ArrowRight') {
+                    nextSlide();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                }
+            });
+            
+            // Table of Contents functionality
+            tocBtn.addEventListener('click', function() {
+                tocPanel.classList.add('active');
+            });
+            
+            tocClose.addEventListener('click', function() {
+                tocPanel.classList.remove('active');
+            });
+            
+            // Toggle section content
+            tocSectionTitles.forEach(title => {
+                title.addEventListener('click', function() {
+                    const section = this.getAttribute('data-section');
+                    const content = this.nextElementSibling;
+                    
+                    // Toggle active class for title
+                    this.classList.toggle('active');
+                    
+                    // Toggle content visibility
+                    content.classList.toggle('active');
+                });
+            });
+            
+            // Navigate to slide when clicking TOC item
+            tocItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const slideIndex = parseInt(this.getAttribute('data-slide'));
+                    if (slideIndex < slides.length) {
+                        currentSlide = slideIndex;
+                        showSlide(currentSlide);
+                        tocPanel.classList.remove('active');
+                    }
+                });
+            });
+            
+            // Navigate to topic when clicking topic card
+            topicCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    const topic = this.getAttribute('data-topic');
+                    if (topicStartIndices[topic] !== undefined) {
+                        currentSlide = topicStartIndices[topic];
+                        showSlide(currentSlide);
+                    }
+                });
+            });
+            
+            // Initialize first slide
+            showSlide(0);
+            
+            // Add animation to elements when they become visible
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('highlight');
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            // Observe all cards and list items
+            document.querySelectorAll('.card, li').forEach(el => {
+                observer.observe(el);
+            });
+        });
+    </script>
+</body>
+</html>
