@@ -1011,6 +1011,11 @@
             <div class="grid">
                 <div class="topic-card" data-topic="cli">
                     <i class="fas fa-terminal"></i>
+                    <h3>Introduction to Web</h3>
+                    <p>Master essential HTML, CSS and JS skills</p>
+                </div>
+                <div class="topic-card" data-topic="cli">
+                    <i class="fas fa-terminal"></i>
                     <h3>Command Line Interface</h3>
                     <p>Master terminal and essential developer commands</p>
                 </div>
@@ -1034,6 +1039,251 @@
                     <h3>JavaScript</h3>
                     <p>Add interactivity and dynamic behavior to your websites</p>
                 </div>
+            </div>
+        </div>
+
+         <!-- Slide 3: WWW Bootcamp – Day 1: Build a Grocery List -->
+        <div class="slide">
+            <h1>WWW Bootcamp – Day 1: Build a Grocery List</h1>
+            <h3>A 60-Minute Intro to Web Development</h3>
+            
+            <div class="tip-box">
+                <p>✅ <strong>No prior experience needed</strong></p>
+                <p>🛒 <strong>You'll build a live, interactive to-do list for groceries</strong></p>
+                <p>💻 <strong>Tools: VS Code + Live Server (that's it!)</strong></p>
+            </div>
+            
+            <h2>🧰 STEP 0: Install What You Need (5 min)</h2>
+            
+            <h3>1. Install VS Code</h3>
+            <ul>
+                <li>Go to: <a href="https://code.visualstudio.com" target="_blank">https://code.visualstudio.com</a> → Download & install</li>
+            </ul>
+            
+            <h3>2. Install Live Server Extension</h3>
+            <ul>
+                <li>Open VS Code</li>
+                <li>Click the <strong>Extensions icon</strong> (🧩) on the left</li>
+                <li>Search for <strong>"Live Server"</strong></li>
+                <li>Install the one by <strong>Ritwick Dey</strong></li>
+            </ul>
+            
+            <div class="tip-box">
+                <p>✅ Done! You're ready to code.</p>
+            </div>
+            
+            <h2>📁 STEP 1: Create Your Project (5 min)</h2>
+            <ol>
+                <li>Open <strong>File Explorer</strong> (Windows) or <strong>Finder</strong> (Mac)</li>
+                <li>Go to your <strong>Documents</strong> folder</li>
+                <li>Create a new folder called:
+                    <div class="css-example">
+                        <code>grocery-list</code>
+                    </div>
+                </li>
+                <li>Open <strong>VS Code</strong></li>
+                <li>Click <strong>File → Open Folder</strong> → Select your <code>grocery-list</code> folder</li>
+            </ol>
+        </div>
+        
+        <!-- Slide 4: Create Your HTML File -->
+        <div class="slide">
+            <h1>Create Your HTML File</h1>
+            
+            <h2>🖥️ STEP 2: Create Your HTML File (5 min)</h2>
+            <ol>
+                <li>In VS Code, click the <strong>New File</strong> icon (📄)</li>
+                <li>Name it:
+                    <div class="css-example">
+                        <code>index.html</code>
+                    </div>
+                </li>
+                <li>Type this shortcut inside the file and press <strong>Enter</strong>:
+                    <div class="css-example">
+                        <code>html:5</code>
+                    </div>
+                    <p>→ This creates a full HTML5 template!</p>
+                </li>
+                <li>Inside the <code>&lt;body&gt;</code> tags, add:
+                    <div class="css-example">
+                        <div class="css-code">
+                            <span class="selector">&lt;h1&gt;</span>My Grocery List<span class="selector">&lt;/h1&gt;</span><br>
+                            <span class="selector">&lt;p&gt;</span>Don't forget to buy:<span class="selector">&lt;/p&gt;</span><br><br>
+                            <span class="selector">&lt;ul&gt;</span><br>
+                            &nbsp;&nbsp;<span class="selector">&lt;li&gt;</span>🍎 Apple<span class="selector">&lt;/li&gt;</span><br>
+                            &nbsp;&nbsp;<span class="selector">&lt;li&gt;</span>🍌 Banana<span class="selector">&lt;/li&gt;</span><br>
+                            &nbsp;&nbsp;<span class="selector">&lt;li&gt;</span>🍊 Orange<span class="selector">&lt;/li&gt;</span><br>
+                            &nbsp;&nbsp;<span class="selector">&lt;li&gt;</span>🥔 Potato<span class="selector">&lt;/li&gt;</span><br>
+                            &nbsp;&nbsp;<span class="selector">&lt;li&gt;</span>🥛 Milk<span class="selector">&lt;/li&gt;</span><br>
+                            <span class="selector">&lt;/ul&gt;</span>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+            
+            <div class="tip-box">
+                <p>💡 <strong>Tip</strong>: Copy-paste the emoji from <a href="https://getemoji.com" target="_blank">getemoji.com</a></p>
+            </div>
+        </div>
+        
+        <!-- Slide 5: View Your Page -->
+        <div class="slide">
+            <h1>View Your Page</h1>
+            
+            <h2>🌐 STEP 3: View Your Page (2 min)</h2>
+            <ul>
+                <li>Right-click anywhere in <code>index.html</code></li>
+                <li>Select <strong>"Open with Live Server"</strong></li>
+            </ul>
+            
+            <div class="tip-box">
+                <p>✅ Your browser opens automatically at <code>http://127.0.0.1:5500</code></p>
+                <p>→ You see your grocery list!</p>
+            </div>
+            
+            <div class="tip-box">
+                <p>🔁 <strong>Every time you save</strong>, the page <strong>auto-reloads</strong>!</p>
+            </div>
+            
+            <h2>🎨 STEP 4: Style with CSS (10 min)</h2>
+            <p>Add this <strong>inside the <code>&lt;head&gt;</code></strong> section (above <code>&lt;/head&gt;</code>):</p>
+            
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="selector">&lt;style&gt;</span><br>
+                    &nbsp;&nbsp;<span class="property">body</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">font-family</span>: <span class="value">Arial, sans-serif</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">background-color</span>: <span class="value">#fff9f0</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">padding</span>: <span class="value">20px</span>;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;<span class="property">h1</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">color</span>: <span class="value">#e67e22</span>;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;<span class="property">ul</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">list-style-type</span>: <span class="value">none</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">padding-left</span>: <span class="value">0</span>;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;<span class="property">li</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">font-size</span>: <span class="value">1.3rem</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">padding</span>: <span class="value">8px 0</span>;<br>
+                    &nbsp;&nbsp;}<br><br>
+                    
+                    &nbsp;&nbsp;<span class="property">input</span>[<span class="property">type</span>=<span class="value">"checkbox"</span>] {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">transform</span>: <span class="value">scale(1.3)</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="property">margin-right</span>: <span class="value">10px</span>;<br>
+                    &nbsp;&nbsp;}<br>
+                    <span class="selector">&lt;/style&gt;</span>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <p>✅ Save → Watch your page become <strong>beautiful</strong>!</p>
+            </div>
+        </div>
+
+                <!-- Slide 6: Add Checkboxes -->
+        <div class="slide">
+            <h1>Add Checkboxes</h1>
+            
+            <h2>✅ STEP 5: Add Checkboxes (10 min)</h2>
+            <p>Replace your <code>&lt;ul&gt;</code> with this:</p>
+            
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="selector">&lt;ul&gt;</span><br>
+                    &nbsp;&nbsp;<span class="selector">&lt;li&gt;&lt;input</span> <span class="property">type</span>=<span class="value">"checkbox"</span> <span class="property">id</span>=<span class="value">"item1"</span><span class="selector">&gt; &lt;label</span> <span class="property">for</span>=<span class="value">"item1"</span><span class="selector">&gt;</span>🍎 Apple<span class="selector">&lt;/label&gt;&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span class="selector">&lt;li&gt;&lt;input</span> <span class="property">type</span>=<span class="value">"checkbox"</span> <span class="property">id</span>=<span class="value">"item2"</span><span class="selector">&gt; &lt;label</span> <span class="property">for</span>=<span class="value">"item2"</span><span class="selector">&gt;</span>🍌 Banana<span class="selector">&lt;/label&gt;&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span class="selector">&lt;li&gt;&lt;input</span> <span class="property">type</span>=<span class="value">"checkbox"</span> <span class="property">id</span>=<span class="value">"item3"</span><span class="selector">&gt; &lt;label</span> <span class="property">for</span>=<span class="value">"item3"</span><span class="selector">&gt;</span>🍊 Orange<span class="selector">&lt;/label&gt;&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span class="selector">&lt;li&gt;&lt;input</span> <span class="property">type</span>=<span class="value">"checkbox"</span> <span class="property">id</span>=<span class="value">"item4"</span><span class="selector">&gt; &lt;label</span> <span class="property">for</span>=<span class="value">"item4"</span><span class="selector">&gt;</span>🥔 Potato<span class="selector">&lt;/label&gt;&lt;/li&gt;</span><br>
+                    &nbsp;&nbsp;<span class="selector">&lt;li&gt;&lt;input</span> <span class="property">type</span>=<span class="value">"checkbox"</span> <span class="property">id</span>=<span class="value">"item5"</span><span class="selector">&gt; &lt;label</span> <span class="property">for</span>=<span class="value">"item5"</span><span class="selector">&gt;</span>🥛 Milk<span class="selector">&lt;/label&gt;&lt;/li&gt;</span><br>
+                    <span class="selector">&lt;/ul&gt;</span>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <p>✅ Save → You now have <strong>clickable checkboxes</strong>!</p>
+            </div>
+            
+            <div class="tip-box">
+                <p>💡 <strong>Why <code>id</code> and <code>for</code>?</strong></p>
+                <ul>
+                    <li>Links label to checkbox</li>
+                    <li>Lets you click the <strong>text</strong> to check the box</li>
+                    <li>Makes your site work with screen readers</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 7: Add JavaScript Magic -->
+        <div class="slide">
+            <h1>Add JavaScript Magic</h1>
+            
+            <h2>⚡ STEP 6: Add JavaScript Magic (15 min)</h2>
+            <p>Add this <strong>at the bottom of <code>&lt;body&gt;</code></strong>, just before <code>&lt;/body&gt;</code>:</p>
+            
+            <div class="css-example">
+                <div class="css-code">
+                    <span class="selector">&lt;script&gt;</span><br>
+                    &nbsp;&nbsp;<span class="method">document.querySelectorAll</span>(<span class="string">'input[type="checkbox"]'</span>).<span class="method">forEach</span>(<span class="variable">box</span> => {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">box</span>.<span class="method">addEventListener</span>(<span class="string">'change'</span>, <span class="keyword">function</span>() {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">const</span> <span class="variable">label</span> = <span class="method">document.querySelector</span>(<span class="string">`label[for="<span class="keyword">${</span><span class="keyword">this</span>.<span class="property">id</span><span class="keyword">}</span>"]`</span>);<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (<span class="keyword">this</span>.<span class="property">checked</span>) {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">label</span>.<span class="property">style</span>.<span class="property">textDecoration</span> = <span class="string">'line-through'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">label</span>.<span class="property">style</span>.<span class="property">opacity</span> = <span class="string">'0.6'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;} <span class="keyword">else</span> {<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">label</span>.<span class="property">style</span>.<span class="property">textDecoration</span> = <span class="string">'none'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">label</span>.<span class="property">style</span>.<span class="property">opacity</span> = <span class="string">'1'</span>;<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;});<br>
+                    &nbsp;&nbsp;});<br>
+                    <span class="selector">&lt;/script&gt;</span>
+                </div>
+            </div>
+            
+            <div class="tip-box">
+                <p>✅ Save → Now when you check an item, it gets <strong>crossed out</strong>!</p>
+            </div>
+            
+            <div class="tip-box">
+                <p>🔍 <strong>How it works</strong>:</p>
+                <ul>
+                    <li><code>querySelectorAll</code> finds all checkboxes</li>
+                    <li><code>addEventListener</code> listens for clicks</li>
+                    <li><code>label.style...</code> changes appearance</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Slide 8: Explore & Play -->
+        <div class="slide">
+            <h1>Explore & Play</h1>
+            
+            <h2>🧪 STEP 7: Explore & Play (8 min)</h2>
+            <p>Try these challenges:</p>
+            <ul>
+                <li>Add 3 more items (🍞 Bread, 🥚 Eggs, 🧀 Cheese)</li>
+                <li>Change the background color (<code>background-color: lightblue;</code>)</li>
+                <li>Make the heading bigger (<code>font-size: 2.5rem;</code>)</li>
+                <li>Add a "Clear All" button (challenge!)</li>
+            </ul>
+            
+            <div class="tip-box">
+                <p>💡 <strong>Tip</strong>: Break something on purpose — then fix it. That's how you learn!</p>
+            </div>
+            
+            <h2>🎯 You Just Learned:</h2>
+            <ul>
+                <li>✅ HTML: structure with headings, lists, forms</li>
+                <li>✅ CSS: colors, fonts, layout</li>
+                <li>✅ JavaScript: interactivity and DOM manipulation</li>
+                <li>✅ Developer workflow: VS Code + Live Server = instant feedback</li>
+            </ul>
+            
+            <div class="tip-box">
+                <p><strong>No deployment. No confusion. Just code that works.</strong></p>
             </div>
         </div>
 
@@ -2696,6 +2946,21 @@
                 <div class="toc-item" data-slide="1">Course Topics</div>
             </div>
         </div>
+
+        <div class="toc-section">
+            <div class="toc-section-title" data-section="web">
+                <span>Introduction to Web</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="toc-section-content">
+                <div class="toc-item" data-slide="2">WWW Bootcamp – Day 1: Build a Grocery List</div>
+                <div class="toc-item" data-slide="3">Create Your HTML File</div>
+                <div class="toc-item" data-slide="4">View Your Page</div>
+                <div class="toc-item" data-slide="5">Add Checkboxes</div>
+                <div class="toc-item" data-slide="6">Add JavaScript Magic</div>
+                <div class="toc-item" data-slide="7">Explore & Play</div>
+            </div>
+        </div>
         
         <div class="toc-section">
             <div class="toc-section-title" data-section="cli">
@@ -2703,16 +2968,16 @@
                 <i class="fas fa-chevron-right"></i>
             </div>
             <div class="toc-section-content active">
-                <div class="toc-item" data-slide="2">CLI Introduction</div>
-                <div class="toc-item" data-slide="3">What is CLI?</div>
-                <div class="toc-item" data-slide="4">Why Use Command Line?</div>
-                <div class="toc-item" data-slide="5">Modern Terminals</div>
-                <div class="toc-item" data-slide="6">Basic Commands</div>
-                <div class="toc-item" data-slide="7">File Content Commands</div>
-                <div class="toc-item" data-slide="8">Git Commands</div>
-                <div class="toc-item" data-slide="9">GitHub CLI Commands</div>
-                <div class="toc-item" data-slide="10">Useful Tips</div>
-                <div class="toc-item" data-slide="11">Practice Exercise</div>
+                <div class="toc-item" data-slide="8">CLI Introduction</div>
+                <div class="toc-item" data-slide="9">What is CLI?</div>
+                <div class="toc-item" data-slide="10">Why Use Command Line?</div>
+                <div class="toc-item" data-slide="11">Modern Terminals</div>
+                <div class="toc-item" data-slide="12">Basic Commands</div>
+                <div class="toc-item" data-slide="13">File Content Commands</div>
+                <div class="toc-item" data-slide="14">Git Commands</div>
+                <div class="toc-item" data-slide="15">GitHub CLI Commands</div>
+                <div class="toc-item" data-slide="16">Useful Tips</div>
+                <div class="toc-item" data-slide="17">Practice Exercise</div>
             </div>
         </div>
         
@@ -2722,7 +2987,7 @@
                 <i class="fas fa-chevron-right"></i>
             </div>
             <div class="toc-section-content active">
-                <div class="toc-item" data-slide="12">Saitama Portfolio Setup</div>
+                <div class="toc-item" data-slide="18">Saitama Portfolio Setup</div>
             </div>
         </div>
         
@@ -2732,13 +2997,13 @@
                 <i class="fas fa-chevron-right"></i>
             </div>
             <div class="toc-section-content active">
-                <div class="toc-item" data-slide="13">HTML Elements Exploration</div>
-                <div class="toc-item" data-slide="14">What is HTML? & Document Structure</div>
-                <div class="toc-item" data-slide="15">Structural Elements</div>
-                <div class="toc-item" data-slide="16">Content Elements</div>
-                <div class="toc-item" data-slide="17">Developer Tools</div>
-                <div class="toc-item" data-slide="18">Best Practices & Next Steps</div>
-                <div class="toc-item" data-slide="19">HTML Exploration Exercise</div>
+                <div class="toc-item" data-slide="19">HTML Elements Exploration</div>
+                <div class="toc-item" data-slide="20">What is HTML? & Document Structure</div>
+                <div class="toc-item" data-slide="21">Structural Elements</div>
+                <div class="toc-item" data-slide="22">Content Elements</div>
+                <div class="toc-item" data-slide="23">Developer Tools</div>
+                <div class="toc-item" data-slide="24">Best Practices & Next Steps</div>
+                <div class="toc-item" data-slide="25">HTML Exploration Exercise</div>
             </div>
         </div>
         
@@ -2748,7 +3013,7 @@
                 <i class="fas fa-chevron-right"></i>
             </div>
             <div class="toc-section-content active">
-                <div class="toc-item" data-slide="20">CSS Exploration - Saitama Portfolio</div>
+                <div class="toc-item" data-slide="26">CSS Exploration - Saitama Portfolio</div>
             </div>
         </div>
         
@@ -2758,13 +3023,13 @@
                 <i class="fas fa-chevron-right"></i>
             </div>
             <div class="toc-section-content">
-                <div class="toc-item" data-slide="22">JavaScript in the Saitama Portfolio</div>
-                <div class="toc-item" data-slide="23">Key JavaScript Concepts</div>
-                <div class="toc-item" data-slide="24">Detailed JavaScript Features</div>
-                <div class="toc-item" data-slide="25">JavaScript Execution Flow</div>
-                <div class="toc-item" data-slide="26">JavaScript Concepts & Best Practices</div>
-                <div class="toc-item" data-slide="27">Modern JavaScript & Experimentation</div>
-                <div class="toc-item" data-slide="28">JavaScript Next Steps</div>
+                <div class="toc-item" data-slide="27">JavaScript in the Saitama Portfolio</div>
+                <div class="toc-item" data-slide="28">Key JavaScript Concepts</div>
+                <div class="toc-item" data-slide="29">Detailed JavaScript Features</div>
+                <div class="toc-item" data-slide="30">JavaScript Execution Flow</div>
+                <div class="toc-item" data-slide="31">JavaScript Concepts & Best Practices</div>
+                <div class="toc-item" data-slide="32">Modern JavaScript & Experimentation</div>
+                <div class="toc-item" data-slide="33">JavaScript Next Steps</div>
             </div>
         </div>
     </div>
@@ -2779,7 +3044,7 @@
     </div>
 
     <div class="slide-indicator">
-        <span id="currentSlide">1</span> / <span id="totalSlides">28</span>
+        <span id="currentSlide">1</span> / <span id="totalSlides">35</span>
     </div>
 
     <div class="keyboard-hint">
@@ -2805,11 +3070,12 @@
             
             // Define topic start indices
             const topicStartIndices = {
-                'cli': 2,
-                'portfolio': 12,
-                'html': 13,
-                'css': 20,
-                'js': 22
+                'web': 2,
+                'cli': 8,
+                'portfolio': 18,
+                'html': 19,
+                'css': 26,
+                'js': 27
             };
             
             function showSlide(index) {
